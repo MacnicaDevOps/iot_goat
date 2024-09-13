@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: make
+    - name: install gcc
       run: |
         sudo apt-get -y update && sudo apt-get -y install gcc
         sudo apt-get -y install build-essential
