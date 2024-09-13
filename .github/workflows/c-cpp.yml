@@ -19,8 +19,7 @@ jobs:
         sudo apt-get -y install build-essential
     - name: make
       run: |
-        git clone https://github.com/OWASP/IoTGoat.git
-        cd IoTGoat/OpenWrt/openwrt-18.06.2/
+        cd OpenWrt/openwrt-18.06.2/
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         make menuconfig # select your preferred configuration for the toolchain, target system & firmware packages.
