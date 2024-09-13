@@ -16,7 +16,7 @@ jobs:
 
     - name: build
       run: |
-        cd IoTGoat/OpenWrt/openwrt-18.06.2/
+        cd OpenWrt/openwrt-18.06.2/
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         make menuconfig # select your preferred configuration for the toolchain, target system & firmware packages.
