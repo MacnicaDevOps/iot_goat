@@ -136,8 +136,8 @@ menuconfig: scripts/config/mconf prepare-tmpinfo FORCE
 #	if [ \! -e .config -a -e $(HOME)/.openwrt/defconfig ]; then \
 #		cp $(HOME)/.openwrt/defconfig .config; \
 #	fi
-	[ -L .config ] && export KCONFIG_OVERWRITECONFIG=1; \
-		$< Config.in
+#	[ -L .config ] && export KCONFIG_OVERWRITECONFIG=1; \
+#		$< Config.in
 
 xconfig: scripts/config/qconf prepare-tmpinfo FORCE
 	if [ \! -e .config -a -e $(HOME)/.openwrt/defconfig ]; then \
