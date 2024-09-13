@@ -13,7 +13,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: configure
+    - name: make
+      run: |
+        sudo apt-get -y update && sudo apt-get -y install gcc
+        sudo apt-get -y install build-essential
+    - name: make
       run: |
         git clone https://github.com/OWASP/IoTGoat.git
         cd IoTGoat/OpenWrt/openwrt-18.06.2/
