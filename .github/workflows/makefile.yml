@@ -14,14 +14,22 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: configure
-      run: ./configure
+    - name: build
+      run: |
+        cd IoTGoat/OpenWrt/openwrt-18.06.2/
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+        make menuconfig # select your preferred configuration for the toolchain, target system & firmware packages.
+        make # Build your firmware with make. This will download all sources, build the cross-compile toolchain and then cross-compile the Linux kernel & all chosen applications for your target system.
 
-    - name: Install dependencies
-      run: make
+#    - name: configure
+#      run: ./configure
 
-    - name: Run check
-      run: make check
+#    - name: Install dependencies
+#      run: make
 
-    - name: Run distcheck
-      run: make distcheck
+#    - name: Run check
+#      run: make check
+
+#    - name: Run distcheck
+#      run: make distcheck
