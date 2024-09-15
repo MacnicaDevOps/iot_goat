@@ -58,7 +58,12 @@ jobs:
           curl -X POST https://platform.finitestate.io/api/launch-export-job -d {"jobName":"CYCLONEDX_EXPORT_JOB_LAUNCHED","currentUserId":"${{secret.userId}}","jobConfig":{"org_id":"${{secret.org_id}}","export_config":{"export_type":"CYCLONEDX","org_id":"${{secret.org_id}}","asset_version_id":"${{secret.asset_version_id}}","include_sbom":false,"include_vdr":true,"export_name":"${{secret.export_name}}","skip_file_sbom_elements":false,"skip_dependencies":false}}}
           sbom_url=$(curl -X POST https://platform.finitestate.io/api/graphql -d {"operationName":"AllExportJobs","variables":{"filter":{"createdBy":{"id":"${{secret.userId}}"}},"orderBy":"createdAt_DESC"},"query":"query AllExportJobs($filter: ExportJobFilter, $orderBy: [ExportJobOrderBy!]) {\n  allExportJobs(filter: $filter, orderBy: $orderBy) {\n    id\n    _cursor\n    _revision\n    workflowId\n    assetVersion {\n      asset {\n        id\n        name\n        __typename\n      }\n      id\n      name\n      __typename\n    }\n    completedDateTime\n    config\n    createdAt\n    createdBy {\n      id\n      email\n      __typename\n    }\n    name\n    product {\n      id\n      name\n      __typename\n    }\n    requestedDateTime\n    status\n    type\n    updatedAt\n    __typename\n  }\n}"} | jq -r .url)
           curl ${sbom_url} -o IoTGoat_sbom.cdx.json
-          curl -X PUT https://uploads.github.com/MacnicaDevOps/SBOMs/releases/${RELEASE_ID}/assets?name=IoTGoat_sbom.cdx.json -d @IoTGoat_sbom.cdx.json
+          curl -X PUT https://uploads.github.com/MacnicaDevOps/SBOMs/releases/${RELEASE_ID}/assets?name=IoTGoat_sbom.cdx.json \
+            --header "Accept: application/vnd.github+json" \
+            --header "Authorization: Bearer ${{secret.github_token}}" \
+            --header "X-GitHub-Api-Version: 2022-11-28" \
+            --header "Content-Type: application/octet-stream" \
+            -d @IoTGoat_sbom.cdx.json
           
       - name: Triage
         if: steps.binary_scan.outcome=='success'
