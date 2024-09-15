@@ -53,7 +53,7 @@ jobs:
           echo Response: "${{steps.binary_scan.outputs.response}}"
           echo Error: "${{steps.binary_scan.outputs.error}}"
 
-      - name: Set response of binary scan
+      - name: Triage
         if: steps.binary_scan.outcome=='success'
         id: set_response
         run: |
