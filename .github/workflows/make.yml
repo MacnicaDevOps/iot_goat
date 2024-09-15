@@ -17,6 +17,7 @@ jobs:
       run: |
         sudo apt-get -y update && sudo apt-get -y install gcc
         sudo apt-get -y install build-essential
+        
     - name: make
       run: |
         cd OpenWrt/openwrt-18.06.2/
@@ -24,3 +25,36 @@ jobs:
         ./scripts/feeds install -a
         make menuconfig # select your preferred configuration for the toolchain, target system & firmware packages.
         make # Build your firmware with make. This will download all sources, build the cross-compile toolchain and then cross-compile the Linux kernel & all chosen applications for your target system.
+
+    - name: Upload binary generated file
+        uses: actions/upload-artifact@v3
+        with:
+          name: binary-artifact
+          path: /IoTGoat_binaryname
+
+    - name: Binary Scan
+        uses: FiniteStateInc/binary-scan@v3.0.0
+        id: binary_scan
+        with:
+          finite-state-client-id: ${{ secrets.CLIENT_ID }}
+          finite-state-secret: ${{ secrets.CLIENT_SECRET }}
+          finite-state-organization-context: ${{ secrets.ORGANIZATION_CONTEXT }}
+          asset-id: ${{env.ASSET_ID}}
+          version: ${{github.sha}} 
+          file-path: /IoTGoat_binaryname
+          github-token: ${{ secrets.GITHUB_TOKEN }} 
+          automatic-comment: true 
+          
+      - name: Set response of binary scan
+        if: steps.binary_scan.outcome=='success'
+        id: set_response
+        run: |
+          echo Asset version URL: ${{steps.binary_scan.outputs.asset-version-url}}
+          echo Response: "${{steps.binary_scan.outputs.response}}"
+          echo Error: "${{steps.binary_scan.outputs.error}}"
+          
+    outputs:
+      ASSET_VERSION_URL: ${{steps.binary_scan.outputs.asset-version-url}}
+      ERROR: ${{steps.binary_scan.outputs.error}}
+      RESPONSE: ${{steps.binary_scan.outputs.response}}
+      
