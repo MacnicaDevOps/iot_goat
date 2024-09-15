@@ -1,0 +1,2 @@
+pod_name,is_internet_connected,is_root,is_privileged,is_port_opened,confidentiality_level,availability_level,integrity_level,scan_result_id
+CI_Scan_Image,TRUE,TRUE,FALSE,TRUE,H,H,H,ci_scan.json
